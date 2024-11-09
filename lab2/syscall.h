@@ -21,4 +21,5 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_sort_syscalls 24
+#define SYS_get_most_syscalls 25
 

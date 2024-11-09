@@ -184,6 +184,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_get_process_syscalls\
+	_get_syscall_most_invoked\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

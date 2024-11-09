@@ -7,29 +7,6 @@
 #include "x86.h"
 #include "syscall.h"
 
-const char* syscall_names [] ={
-  "none",
-  "fork",
-  "exit",
-  "read",
-  "pipe",
-  "kill",
-  "exec",
-  "fstat",
-  "chdir",
-  "dup",
-  "getpid",
-  "sbrk",
-  "sleep",
-  "uptime",
-  "open",
-  "write",
-  "mknod",
-  "unlink",
-  "link",
-  "mkdir",
-  "close"
-};
 
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
@@ -128,6 +105,7 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_sort_syscalls(void);
+extern int sys_get_most_syscalls(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -152,6 +130,7 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_sort_syscalls] sys_sort_syscalls,
+[SYS_get_most_syscalls] sys_get_most_syscalls,
 };
 
 void
