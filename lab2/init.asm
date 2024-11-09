@@ -652,10 +652,12 @@ SYSCALL(uptime)
  3eb:	b8 0e 00 00 00       	mov    $0xe,%eax
  3f0:	cd 40                	int    $0x40
  3f2:	c3                   	ret    
- 3f3:	66 90                	xchg   %ax,%ax
- 3f5:	66 90                	xchg   %ax,%ax
- 3f7:	66 90                	xchg   %ax,%ax
- 3f9:	66 90                	xchg   %ax,%ax
+
+000003f3 <sort_syscalls>:
+SYSCALL(sort_syscalls)
+ 3f3:	b8 18 00 00 00       	mov    $0x18,%eax
+ 3f8:	cd 40                	int    $0x40
+ 3fa:	c3                   	ret    
  3fb:	66 90                	xchg   %ax,%ax
  3fd:	66 90                	xchg   %ax,%ax
  3ff:	90                   	nop

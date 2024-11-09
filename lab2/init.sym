@@ -13,6 +13,7 @@
 0000039b mknod
 00000220 gets
 000003d3 getpid
+000003f3 sort_syscalls
 000006e0 malloc
 000003e3 sleep
 00000363 pipe

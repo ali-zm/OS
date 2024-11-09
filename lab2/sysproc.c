@@ -77,6 +77,24 @@ sys_sleep(void)
   return 0;
 }
 
+int sys_sort_syscalls(void)
+{
+  int pid;
+  int counts[MAX_SYSCALLS];
+  if(argint(0, &pid)<0 || argptr(0,(void*)&counts, sizeof(int)*MAX_SYSCALLS<0))
+    return -1;
+  
+  struct proc *p = findproc(pid);
+  if(p==0) return -1;
+  for(int i=0; i<MAX_SYSCALLS; i++)
+  {
+    if(p->syscalls[i] != 0)
+      cprintf("%d\n", i);
+
+  }
+  return 0;
+}
+
 // return how many clock tick interrupts have occurred
 // since start.
 int

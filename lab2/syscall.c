@@ -7,6 +7,30 @@
 #include "x86.h"
 #include "syscall.h"
 
+const char* syscall_names [] ={
+  "none",
+  "fork",
+  "exit",
+  "read",
+  "pipe",
+  "kill",
+  "exec",
+  "fstat",
+  "chdir",
+  "dup",
+  "getpid",
+  "sbrk",
+  "sleep",
+  "uptime",
+  "open",
+  "write",
+  "mknod",
+  "unlink",
+  "link",
+  "mkdir",
+  "close"
+};
+
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
 // Arguments on the stack, from the user call to the C
@@ -103,7 +127,7 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
-extern int sys_get_syscalls(void);
+extern int sys_sort_syscalls(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -127,7 +151,7 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
-[SYS_get_syscalls] sys_get_syscalls,
+[SYS_sort_syscalls] sys_sort_syscalls,
 };
 
 void
@@ -138,11 +162,9 @@ syscall(void)
 
   num = curproc->tf->eax; //define syscall number
 
-  if(curproc->count_syscalls<MAX_SYSCALLS)
-  {
-    curproc->syscalls[curproc->count_syscalls] = num;
-    curproc->count_syscalls++;
-  }
+  if(num<MAX_SYSCALLS && num>0)
+    curproc->syscalls[num]++;
+    
   
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();

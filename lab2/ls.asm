@@ -866,10 +866,12 @@ SYSCALL(uptime)
  62b:	b8 0e 00 00 00       	mov    $0xe,%eax
  630:	cd 40                	int    $0x40
  632:	c3                   	ret    
- 633:	66 90                	xchg   %ax,%ax
- 635:	66 90                	xchg   %ax,%ax
- 637:	66 90                	xchg   %ax,%ax
- 639:	66 90                	xchg   %ax,%ax
+
+00000633 <sort_syscalls>:
+SYSCALL(sort_syscalls)
+ 633:	b8 18 00 00 00       	mov    $0x18,%eax
+ 638:	cd 40                	int    $0x40
+ 63a:	c3                   	ret    
  63b:	66 90                	xchg   %ax,%ax
  63d:	66 90                	xchg   %ax,%ax
  63f:	90                   	nop

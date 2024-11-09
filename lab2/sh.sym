@@ -16,6 +16,7 @@
 00000ea3 getpid
 000008b0 parsepipe
 00000b60 parsecmd
+00000ec3 sort_syscalls
 00000440 backcmd
 000005d0 peek
 00000650 parseredirs
