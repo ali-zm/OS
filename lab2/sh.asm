@@ -2132,10 +2132,12 @@ SYSCALL(get_most_syscalls)
      ecb:	b8 19 00 00 00       	mov    $0x19,%eax
      ed0:	cd 40                	int    $0x40
      ed2:	c3                   	ret    
-     ed3:	66 90                	xchg   %ax,%ax
-     ed5:	66 90                	xchg   %ax,%ax
-     ed7:	66 90                	xchg   %ax,%ax
-     ed9:	66 90                	xchg   %ax,%ax
+
+00000ed3 <list_active_processes>:
+SYSCALL(list_active_processes)
+     ed3:	b8 1a 00 00 00       	mov    $0x1a,%eax
+     ed8:	cd 40                	int    $0x40
+     eda:	c3                   	ret    
      edb:	66 90                	xchg   %ax,%ax
      edd:	66 90                	xchg   %ax,%ax
      edf:	90                   	nop

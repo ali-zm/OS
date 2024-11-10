@@ -106,6 +106,7 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_sort_syscalls(void);
 extern int sys_get_most_syscalls(void);
+extern int sys_list_active_processes(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -131,6 +132,7 @@ static int (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_sort_syscalls] sys_sort_syscalls,
 [SYS_get_most_syscalls] sys_get_most_syscalls,
+[SYS_list_active_processes] sys_list_active_processes,
 };
 
 void

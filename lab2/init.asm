@@ -664,10 +664,12 @@ SYSCALL(get_most_syscalls)
  3fb:	b8 19 00 00 00       	mov    $0x19,%eax
  400:	cd 40                	int    $0x40
  402:	c3                   	ret    
- 403:	66 90                	xchg   %ax,%ax
- 405:	66 90                	xchg   %ax,%ax
- 407:	66 90                	xchg   %ax,%ax
- 409:	66 90                	xchg   %ax,%ax
+
+00000403 <list_active_processes>:
+SYSCALL(list_active_processes)
+ 403:	b8 1a 00 00 00       	mov    $0x1a,%eax
+ 408:	cd 40                	int    $0x40
+ 40a:	c3                   	ret    
  40b:	66 90                	xchg   %ax,%ax
  40d:	66 90                	xchg   %ax,%ax
  40f:	90                   	nop

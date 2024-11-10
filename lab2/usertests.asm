@@ -6042,10 +6042,12 @@ SYSCALL(get_most_syscalls)
     397b:	b8 19 00 00 00       	mov    $0x19,%eax
     3980:	cd 40                	int    $0x40
     3982:	c3                   	ret    
-    3983:	66 90                	xchg   %ax,%ax
-    3985:	66 90                	xchg   %ax,%ax
-    3987:	66 90                	xchg   %ax,%ax
-    3989:	66 90                	xchg   %ax,%ax
+
+00003983 <list_active_processes>:
+SYSCALL(list_active_processes)
+    3983:	b8 1a 00 00 00       	mov    $0x1a,%eax
+    3988:	cd 40                	int    $0x40
+    398a:	c3                   	ret    
     398b:	66 90                	xchg   %ax,%ax
     398d:	66 90                	xchg   %ax,%ax
     398f:	90                   	nop

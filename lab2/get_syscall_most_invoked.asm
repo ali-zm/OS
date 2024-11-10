@@ -8,7 +8,7 @@ Disassembly of section .text:
 #include "types.h"
 #include "stat.h"
 #include "user.h"
-#define MAX_SYSCALLS 26
+#define MAX_SYSCALLS 27
 
 int main(void) {
    0:	8d 4c 24 04          	lea    0x4(%esp),%ecx
@@ -611,10 +611,12 @@ SYSCALL(get_most_syscalls)
  37b:	b8 19 00 00 00       	mov    $0x19,%eax
  380:	cd 40                	int    $0x40
  382:	c3                   	ret    
- 383:	66 90                	xchg   %ax,%ax
- 385:	66 90                	xchg   %ax,%ax
- 387:	66 90                	xchg   %ax,%ax
- 389:	66 90                	xchg   %ax,%ax
+
+00000383 <list_active_processes>:
+SYSCALL(list_active_processes)
+ 383:	b8 1a 00 00 00       	mov    $0x1a,%eax
+ 388:	cd 40                	int    $0x40
+ 38a:	c3                   	ret    
  38b:	66 90                	xchg   %ax,%ax
  38d:	66 90                	xchg   %ax,%ax
  38f:	90                   	nop

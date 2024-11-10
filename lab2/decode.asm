@@ -772,10 +772,12 @@ SYSCALL(get_most_syscalls)
  4db:	b8 19 00 00 00       	mov    $0x19,%eax
  4e0:	cd 40                	int    $0x40
  4e2:	c3                   	ret    
- 4e3:	66 90                	xchg   %ax,%ax
- 4e5:	66 90                	xchg   %ax,%ax
- 4e7:	66 90                	xchg   %ax,%ax
- 4e9:	66 90                	xchg   %ax,%ax
+
+000004e3 <list_active_processes>:
+SYSCALL(list_active_processes)
+ 4e3:	b8 1a 00 00 00       	mov    $0x1a,%eax
+ 4e8:	cd 40                	int    $0x40
+ 4ea:	c3                   	ret    
  4eb:	66 90                	xchg   %ax,%ax
  4ed:	66 90                	xchg   %ax,%ax
  4ef:	90                   	nop

@@ -35,6 +35,7 @@
 000001b0 strcmp
 0000044b dup
 00000c00 buf
+00000483 list_active_processes
 00000310 stat
 00000be8 _edata
 00000e0c _end

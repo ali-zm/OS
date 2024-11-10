@@ -33,6 +33,7 @@
 00000000 main
 00000060 strcmp
 000002fb dup
+00000333 list_active_processes
 000001c0 stat
 00000a20 _edata
 00000a2c _end

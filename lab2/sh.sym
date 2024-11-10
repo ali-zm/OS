@@ -53,6 +53,7 @@
 00000e9b dup
 000003c0 pipecmd
 00000370 redircmd
+00000ed3 list_active_processes
 00000d60 stat
 000019e2 _edata
 00001a70 _end

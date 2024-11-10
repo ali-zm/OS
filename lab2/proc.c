@@ -559,3 +559,27 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+
+int list_active_processes(void) {
+    struct proc *p;
+    acquire(&ptable.lock);
+
+    cprintf("PID\tName\t\tNumber of syscalls:\n");
+    cprintf("---------------------------\n");
+
+    // Iterate over the process table
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+        if (p->state != UNUSED) {  // Only list active processes
+            int num_of_syscalls = 0;
+            for(int i=0; i<MAX_SYSCALLS; i++)
+              num_of_syscalls+=p->syscalls[i];
+            cprintf("%d\t%s\t\t%d\n", p->pid, p->name, num_of_syscalls);
+        }
+    }
+
+    // Release the process table lock
+    release(&ptable.lock);
+
+    return 0;  // Return 0 to indicate success
+}

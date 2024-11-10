@@ -150,3 +150,9 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+
+int sys_list_active_processes(void) {
+    list_active_processes();
+    return 0;  // Return 0 to indicate success
+}

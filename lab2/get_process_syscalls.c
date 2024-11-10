@@ -1,7 +1,7 @@
 #include "types.h"
 #include "stat.h"
 #include "user.h"
-#define MAX_SYSCALLS 26
+#define MAX_SYSCALLS 27
 
 int main(void) {
     
