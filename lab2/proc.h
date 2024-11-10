@@ -56,7 +56,7 @@ struct proc {
 };
 
 int list_active_processes(void);
-
+struct proc* findproc(int pid);
 // Process memory is laid out contiguously, low addresses first:
 //   text
 //   original data and bss

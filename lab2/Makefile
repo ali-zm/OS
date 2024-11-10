@@ -189,6 +189,7 @@ UPROGS=\
 	_get_process_syscalls\
 	_get_syscall_most_invoked\
 	_list_active_processes\
+	_test_palindrome\
 	_test_gdb\
 
 fs.img: mkfs README $(UPROGS)
@@ -259,12 +260,8 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-<<<<<<< HEAD
-	printf.c umalloc.c \
-=======
 	printf.c umalloc.c move_file_test.c\
 	printf.c umalloc.c get_process_syscalls.c get_syscall_most_invoked.c\
->>>>>>> refs/remotes/origin/main
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

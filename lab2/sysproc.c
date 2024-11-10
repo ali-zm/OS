@@ -8,6 +8,54 @@
 #include "proc.h"
 
 
+#include "syscall.h"
+#include "traps.h"
+
+
+int create_palindrome_num(int num) {
+    char str[20];  // Buffer to hold the original number as a string 
+    //(20 digits to handle large integers)
+    int length = 0;
+
+    // Converting our integer to string
+    int temp = num;
+    while (temp > 0) {
+        str[length++] = (temp % 10) + '0';
+        temp /= 10;
+    }
+    str[length] = '\0'; 
+
+    char palindrome_str[40];  // 2x length buffer to handle the palindrome
+    int i, j;
+    for (i = 0; i < length; i++) {
+        palindrome_str[i] = str[length - i - 1];  // Copying the reversed part
+    }
+    for (j = 0; j < length; j++) {
+        palindrome_str[i++] = str[j];  // Copying the original part
+    }
+    palindrome_str[i] = '\0';
+
+    cprintf("%s\n", palindrome_str);
+
+    return 0;
+}
+
+int sys_create_palindrome(void) {
+    int num;
+
+    // Receive the integer argument from the REGISTERS
+    if (argint(0, &num) < 0)
+        return -1;
+
+    // Generate and print the palindrome in kernel level
+    create_palindrome_num(num);
+
+    return 0;
+}
+
+
+
+
 const char* syscall_names [] ={
   "none",
   "fork",

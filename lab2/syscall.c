@@ -108,6 +108,8 @@ extern int sys_move_file(void);
 extern int sys_sort_syscalls(void);
 extern int sys_get_most_syscalls(void);
 extern int sys_list_active_processes(void);
+extern int sys_create_palindrome(void);
+
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -135,6 +137,7 @@ static int (*syscalls[])(void) = {
 [SYS_sort_syscalls] sys_sort_syscalls,
 [SYS_get_most_syscalls] sys_get_most_syscalls,
 [SYS_list_active_processes] sys_list_active_processes,
+[SYS_create_palindrome] sys_create_palindrome,
 };
 
 void
