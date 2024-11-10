@@ -7,6 +7,32 @@
 #include "mmu.h"
 #include "proc.h"
 
+
+const char* syscall_names [] ={
+  "none",
+  "fork",
+  "exit",
+  "wait",
+  "read",
+  "pipe",
+  "kill",
+  "exec",
+  "fstat",
+  "chdir",
+  "dup",
+  "getpid",
+  "sbrk",
+  "sleep",
+  "uptime",
+  "open",
+  "write",
+  "mknod",
+  "unlink",
+  "link",
+  "mkdir",
+  "close"
+};
+
 int
 sys_fork(void)
 {
@@ -77,6 +103,41 @@ sys_sleep(void)
   return 0;
 }
 
+int sys_sort_syscalls(void)
+{
+  int pid;
+  int counts[MAX_SYSCALLS];
+  if(argint(0, &pid)<0 || argptr(0,(void*)&counts, sizeof(int)*MAX_SYSCALLS<0))
+    return -1;
+  
+  struct proc *p = findproc(pid);
+  if(p==0) return -1;
+  for(int i=0; i<MAX_SYSCALLS; i++)
+  {
+    if(p->syscalls[i] != 0)
+      cprintf("%d\n", i);
+
+  }
+  return 0;
+}
+
+int sys_get_most_syscalls(void)
+{
+  int pid;
+  if(argint(0, &pid)<0 , sizeof(int)*MAX_SYSCALLS<0)
+    return -1;
+  
+  struct proc *p = findproc(pid);
+  if(p==0) return -1;
+  int syscall_most_invoked = -1;
+  for(int i=0; i<MAX_SYSCALLS; i++)
+    if(p->syscalls[i] > syscall_most_invoked)
+      syscall_most_invoked = i;
+  if(syscall_most_invoked<0) return -1;
+  cprintf("System call been most invoked: %s - %d times", syscall_names[syscall_most_invoked], p->syscalls[syscall_most_invoked]);
+  return 0;
+}
+
 // return how many clock tick interrupts have occurred
 // since start.
 int
@@ -88,4 +149,10 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+
+int sys_list_active_processes(void) {
+    list_active_processes();
+    return 0;  // Return 0 to indicate success
 }

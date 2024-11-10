@@ -7,6 +7,7 @@
 #include "x86.h"
 #include "syscall.h"
 
+
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
 // Arguments on the stack, from the user call to the C
@@ -104,6 +105,9 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_move_file(void);
+extern int sys_sort_syscalls(void);
+extern int sys_get_most_syscalls(void);
+extern int sys_list_active_processes(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -128,6 +132,9 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_move_file] sys_move_file,
+[SYS_sort_syscalls] sys_sort_syscalls,
+[SYS_get_most_syscalls] sys_get_most_syscalls,
+[SYS_list_active_processes] sys_list_active_processes,
 };
 
 void
@@ -136,7 +143,12 @@ syscall(void)
   int num;
   struct proc *curproc = myproc();
 
-  num = curproc->tf->eax;
+  num = curproc->tf->eax; //define syscall number
+
+  if(num<MAX_SYSCALLS && num>0)
+    curproc->syscalls[num]++;
+    
+  
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();
   } else {

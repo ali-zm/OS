@@ -7,6 +7,7 @@
 #include "proc.h"
 #include "spinlock.h"
 
+
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
@@ -65,6 +66,29 @@ myproc(void) {
   return p;
 }
 
+
+
+struct proc* findproc(int pid) {
+    struct proc *p;
+
+    // Acquire the process table lock to ensure thread safety.
+    acquire(&ptable.lock);
+
+    // Iterate over the process table to find the process with the matching pid.
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+        if (p->pid == pid) {
+            release(&ptable.lock);  // Release the lock before returning.
+            return p;
+        }
+    }
+
+    // Release the lock if no process with the given pid is found.
+    release(&ptable.lock);
+    return 0;
+}
+
+
+
 //PAGEBREAK: 32
 // Look in the process table for an UNUSED proc.
 // If found, change state to EMBRYO and initialize
@@ -75,8 +99,9 @@ allocproc(void)
 {
   struct proc *p;
   char *sp;
-
+  
   acquire(&ptable.lock);
+  
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     if(p->state == UNUSED)
@@ -86,6 +111,8 @@ allocproc(void)
   return 0;
 
 found:
+  for(int i=0; i<MAX_SYSCALLS; i++)
+    p->syscalls[i]=0;
   p->state = EMBRYO;
   p->pid = nextpid++;
 
@@ -531,4 +558,28 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+
+int list_active_processes(void) {
+    struct proc *p;
+    acquire(&ptable.lock);
+
+    cprintf("PID\tName\t\tNumber of syscalls:\n");
+    cprintf("---------------------------\n");
+
+    // Iterate over the process table
+    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+        if (p->state != UNUSED) {  // Only list active processes
+            int num_of_syscalls = 0;
+            for(int i=0; i<MAX_SYSCALLS; i++)
+              num_of_syscalls+=p->syscalls[i];
+            cprintf("%d\t%s\t\t%d\n", p->pid, p->name, num_of_syscalls);
+        }
+    }
+
+    // Release the process table lock
+    release(&ptable.lock);
+
+    return 0;  // Return 0 to indicate success
 }

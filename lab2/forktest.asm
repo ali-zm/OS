@@ -53,11 +53,19 @@ main(void)
 {
   46:	83 ec 10             	sub    $0x10,%esp
   write(fd, s, strlen(s));
+<<<<<<< HEAD
   49:	68 0c 04 00 00       	push   $0x40c
   4e:	e8 5d 01 00 00       	call   1b0 <strlen>
   53:	83 c4 0c             	add    $0xc,%esp
   56:	50                   	push   %eax
   57:	68 0c 04 00 00       	push   $0x40c
+=======
+  49:	68 2c 04 00 00       	push   $0x42c
+  4e:	e8 5d 01 00 00       	call   1b0 <strlen>
+  53:	83 c4 0c             	add    $0xc,%esp
+  56:	50                   	push   %eax
+  57:	68 2c 04 00 00       	push   $0x42c
+>>>>>>> 0c92ca4dcf5535cd18046519fa90238b0fce8398
   5c:	6a 01                	push   $0x1
   5e:	e8 20 03 00 00       	call   383 <write>
   63:	83 c4 10             	add    $0x10,%esp
@@ -92,11 +100,19 @@ main(void)
   a6:	75 49                	jne    f1 <forktest+0xb1>
   write(fd, s, strlen(s));
   a8:	83 ec 0c             	sub    $0xc,%esp
+<<<<<<< HEAD
   ab:	68 3e 04 00 00       	push   $0x43e
   b0:	e8 fb 00 00 00       	call   1b0 <strlen>
   b5:	83 c4 0c             	add    $0xc,%esp
   b8:	50                   	push   %eax
   b9:	68 3e 04 00 00       	push   $0x43e
+=======
+  ab:	68 5e 04 00 00       	push   $0x45e
+  b0:	e8 fb 00 00 00       	call   1b0 <strlen>
+  b5:	83 c4 0c             	add    $0xc,%esp
+  b8:	50                   	push   %eax
+  b9:	68 5e 04 00 00       	push   $0x45e
+>>>>>>> 0c92ca4dcf5535cd18046519fa90238b0fce8398
   be:	6a 01                	push   $0x1
   c0:	e8 be 02 00 00       	call   383 <write>
 }
@@ -107,11 +123,19 @@ main(void)
   ca:	e8 94 02 00 00       	call   363 <exit>
   write(fd, s, strlen(s));
   cf:	83 ec 0c             	sub    $0xc,%esp
+<<<<<<< HEAD
   d2:	68 17 04 00 00       	push   $0x417
   d7:	e8 d4 00 00 00       	call   1b0 <strlen>
   dc:	83 c4 0c             	add    $0xc,%esp
   df:	50                   	push   %eax
   e0:	68 17 04 00 00       	push   $0x417
+=======
+  d2:	68 37 04 00 00       	push   $0x437
+  d7:	e8 d4 00 00 00       	call   1b0 <strlen>
+  dc:	83 c4 0c             	add    $0xc,%esp
+  df:	50                   	push   %eax
+  e0:	68 37 04 00 00       	push   $0x437
+>>>>>>> 0c92ca4dcf5535cd18046519fa90238b0fce8398
   e5:	6a 01                	push   $0x1
   e7:	e8 97 02 00 00       	call   383 <write>
       exit();
@@ -119,7 +143,11 @@ main(void)
     printf(1, "wait got too many\n");
   f1:	52                   	push   %edx
   f2:	52                   	push   %edx
+<<<<<<< HEAD
   f3:	68 2b 04 00 00       	push   $0x42b
+=======
+  f3:	68 4b 04 00 00       	push   $0x44b
+>>>>>>> 0c92ca4dcf5535cd18046519fa90238b0fce8398
   f8:	6a 01                	push   $0x1
   fa:	e8 11 ff ff ff       	call   10 <printf>
     exit();
@@ -127,7 +155,11 @@ main(void)
     printf(1, "fork claimed to work N times!\n", N);
  104:	50                   	push   %eax
  105:	68 e8 03 00 00       	push   $0x3e8
+<<<<<<< HEAD
  10a:	68 4c 04 00 00       	push   $0x44c
+=======
+ 10a:	68 6c 04 00 00       	push   $0x46c
+>>>>>>> 0c92ca4dcf5535cd18046519fa90238b0fce8398
  10f:	6a 01                	push   $0x1
  111:	e8 fa fe ff ff       	call   10 <printf>
     exit();
@@ -649,6 +681,7 @@ SYSCALL(sleep)
 
 000003fb <uptime>:
 SYSCALL(uptime)
+<<<<<<< HEAD
  3fb:	b8 0e 00 00 00       	mov    $0xe,%eax
  400:	cd 40                	int    $0x40
  402:	c3                   	ret
@@ -658,3 +691,26 @@ SYSCALL(move_file)
  403:	b8 17 00 00 00       	mov    $0x17,%eax
  408:	cd 40                	int    $0x40
  40a:	c3                   	ret
+=======
+ 40b:	b8 0e 00 00 00       	mov    $0xe,%eax
+ 410:	cd 40                	int    $0x40
+ 412:	c3                   	ret    
+
+00000413 <sort_syscalls>:
+SYSCALL(sort_syscalls)
+ 413:	b8 18 00 00 00       	mov    $0x18,%eax
+ 418:	cd 40                	int    $0x40
+ 41a:	c3                   	ret    
+
+0000041b <get_most_syscalls>:
+SYSCALL(get_most_syscalls)
+ 41b:	b8 19 00 00 00       	mov    $0x19,%eax
+ 420:	cd 40                	int    $0x40
+ 422:	c3                   	ret    
+
+00000423 <list_active_processes>:
+SYSCALL(list_active_processes)
+ 423:	b8 1a 00 00 00       	mov    $0x1a,%eax
+ 428:	cd 40                	int    $0x40
+ 42a:	c3                   	ret    
+>>>>>>> 0c92ca4dcf5535cd18046519fa90238b0fce8398

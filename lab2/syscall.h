@@ -2,8 +2,8 @@
 #define SYS_fork    1
 #define SYS_exit    2
 #define SYS_wait    3
-#define SYS_pipe    4
 #define SYS_read    5
+#define SYS_pipe    4
 #define SYS_kill    6
 #define SYS_exec    7
 #define SYS_fstat   8
@@ -21,3 +21,7 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_move_file 23
+#define SYS_sort_syscalls 24
+#define SYS_get_most_syscalls 25
+#define SYS_list_active_processes 26
+

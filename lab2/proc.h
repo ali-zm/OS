@@ -35,7 +35,11 @@ struct context {
 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
+
+#define MAX_SYSCALLS 27
+
 struct proc {
+  int syscalls[MAX_SYSCALLS];
   uint sz;                     // Size of process memory (bytes)
   pde_t* pgdir;                // Page table
   char *kstack;                // Bottom of kernel stack for this process
@@ -48,8 +52,10 @@ struct proc {
   int killed;                  // If non-zero, have been killed
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
-  char name[16];               // Process name (debugging)
+  char name[24];               // Process name (debugging)
 };
+
+int list_active_processes(void);
 
 // Process memory is laid out contiguously, low addresses first:
 //   text
