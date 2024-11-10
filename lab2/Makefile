@@ -77,6 +77,7 @@ LD = $(TOOLPREFIX)ld
 OBJCOPY = $(TOOLPREFIX)objcopy
 OBJDUMP = $(TOOLPREFIX)objdump
 CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32  -fno-omit-frame-pointer
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32  -fno-omit-frame-pointer
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 ASFLAGS = -m32 -gdwarf-2 -Wa,-divide
 # FreeBSD ld wants ``elf_i386_fbsd''
@@ -157,6 +158,7 @@ _forktest: forktest.o $(ULIB)
 	$(OBJDUMP) -S _forktest > forktest.asm
 
 mkfs: mkfs.c fs.h
+	gcc  -Wall -o mkfs mkfs.c
 	gcc -Wall -o mkfs mkfs.c
 
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
@@ -183,6 +185,7 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
+	_move_file_test\
 	_get_process_syscalls\
 	_get_syscall_most_invoked\
 	_list_active_processes\
@@ -256,7 +259,12 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
+<<<<<<< HEAD
 	printf.c umalloc.c \
+=======
+	printf.c umalloc.c move_file_test.c\
+	printf.c umalloc.c get_process_syscalls.c get_syscall_most_invoked.c\
+>>>>>>> refs/remotes/origin/main
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

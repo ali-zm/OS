@@ -104,6 +104,7 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
+extern int sys_move_file(void);
 extern int sys_sort_syscalls(void);
 extern int sys_get_most_syscalls(void);
 extern int sys_list_active_processes(void);
@@ -130,6 +131,7 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_move_file] sys_move_file,
 [SYS_sort_syscalls] sys_sort_syscalls,
 [SYS_get_most_syscalls] sys_get_most_syscalls,
 [SYS_list_active_processes] sys_list_active_processes,

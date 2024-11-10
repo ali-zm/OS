@@ -15,6 +15,8 @@
 #include "sleeplock.h"
 #include "file.h"
 #include "fcntl.h"
+// #include "string.h"
+// #include "unistd.h"
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.
@@ -440,5 +442,83 @@ sys_pipe(void)
   }
   fd[0] = fd0;
   fd[1] = fd1;
+  return 0;
+}
+
+int
+sys_move_file(void)
+{
+  char *src_file, *dest_dir;
+  struct dirent de;
+  uint  offset;
+  if ((argstr(0, &src_file) < 0) || (argstr(1, &dest_dir) < 0))
+  {
+    return -1;
+  }
+  begin_op();
+
+  struct inode *src_ip = namei(src_file);
+  if (src_ip == 0)
+  {
+    cprintf("File not found: %s\n", src_file);
+    end_op();
+    return -1;
+  }
+  ilock(src_ip);
+  
+  struct inode *dir_ip = namei(dest_dir);
+  if (dir_ip== 0)
+  {
+    cprintf("Directory not found: %s\n", dest_dir);
+    iunlockput(src_ip);
+    end_op();
+    return -1;
+  }
+  ilock(dir_ip);
+
+  char filename[128];
+  safestrcpy(filename, src_file, sizeof(filename));
+   
+  if (dirlink(dir_ip, filename, src_ip->inum) < 0)
+  {
+    iunlockput(dir_ip);
+    iunlockput(src_ip);
+    end_op();
+    return -1;
+  }
+
+  struct inode *dp_parent = nameiparent(src_file,  filename);
+  if (dp_parent == 0)
+  {
+    iunlockput(dir_ip);
+    iunlockput(src_ip);
+    end_op();
+    return -1;
+  }
+
+  struct inode *ip = dirlookup(dp_parent, filename, &offset);
+  if (ip == 0)
+  {
+    iunlockput(dir_ip);
+    iunlockput(src_ip);
+    end_op();
+    return -1;
+  }
+
+  memset(&de, 0, sizeof(de));
+  ilock(dp_parent);
+  if (writei(dp_parent, (char*)&de, offset, sizeof(de)) != sizeof(de))
+  {
+    iunlockput(dp_parent);
+    iunlockput(dir_ip);
+    iunlockput(src_ip);
+    end_op();
+    return -1;
+  }
+
+  iunlockput(src_ip);
+  iunlockput(dir_ip);
+  iunlockput(dp_parent);
+  end_op();
   return 0;
 }
