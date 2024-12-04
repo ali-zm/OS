@@ -371,6 +371,21 @@ struct proc *round_robin(struct proc *last)
 }
 
 
+struct proc *first_come_first_service()
+{
+  struct proc* res=-1;
+  struct proc* p;
+  for(p=ptable.proc; p<&ptable.proc[NPROC]; p++)
+  {
+    if((p->state != RUNNABLE) || (p->sched_info.level!=FCFS))
+      continue;
+    if(res == -1)
+      res = p;
+    else if(p->sched_info.enter_level_time<res->sched_info.enter_level_time)
+      res = p;
+  }
+  return p;
+}
 
 void scheduler(void)
 {
