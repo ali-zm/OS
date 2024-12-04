@@ -32,11 +32,26 @@ struct context {
   uint eip;
 };
 
+
 enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
+enum schedqueue {ROUND_ROBIN, SJF, FCFS, NONE};
+
+
+struct ScheduleInfo
+{
+  enum schedqueue level;
+  int time_slice;
+  int burst_time;
+  uint creation_time;
+  uint enter_level_time;
+  int confidence;
+};
+
 
 // Per-process state
 
 #define MAX_SYSCALLS 27
+#define NUM_QUEUES 3
 
 struct proc {
   int syscalls[MAX_SYSCALLS];
@@ -53,6 +68,10 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[24];               // Process name (debugging)
+
+  struct ScheduleInfo sched_info;
+
+  
 };
 
 int list_active_processes(void);
