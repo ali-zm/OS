@@ -370,6 +370,30 @@ struct proc *round_robin(struct proc *last)
   return -1;
 }
 
+int create_rand_num(int seed)
+{
+  return (ticks*ticks)%seed;
+}
+
+struct proc *short_job_first()
+{
+  struct proc* res=-1;
+  struct proc* p;
+  for(p=ptable.proc; p<&ptable.proc[NPROC]; p++)
+  {
+    if((p->state != RUNNABLE) || (p->sched_info.level!=SJF))
+      continue;
+    
+    if(p->sched_info.confidence > create_rand_num(100))
+    {
+      if(res == -1)
+        res = p;
+      else if(p->sched_info.burst_time < res->sched_info.burst_time)
+        res = p;
+    }
+  }
+  return res;
+}
 
 struct proc *first_come_first_service()
 {
@@ -384,7 +408,7 @@ struct proc *first_come_first_service()
     else if(p->sched_info.enter_level_time<res->sched_info.enter_level_time)
       res = p;
   }
-  return p;
+  return res;
 }
 
 void scheduler(void)
