@@ -411,6 +411,33 @@ struct proc *first_come_first_service()
   return res;
 }
 
+void aging(int os_ticks)
+{
+  struct proc *p;
+  acquire(&ptable.lock);
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->state == RUNNABLE)
+    {
+      if( p->sched_info.level == ROUND_ROBIN)
+        continue;
+      if (os_ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD)
+      {
+        {
+          release(&ptable.lock);
+          if(p->sched_info.level == SJF)
+            change_Q(p->pid, ROUND_ROBIN);
+          else if(p->sched_info.level == FCFS)
+            change_Q(p->pid, SJF);
+          acquire(&ptable.lock);
+        }
+      }  
+      
+    }
+  }
+  release(&ptable.lock);
+}
+
 void scheduler(void)
 {
   struct proc *p;

@@ -40,8 +40,8 @@ enum schedqueue {ROUND_ROBIN, SJF, FCFS, NONE};
 struct ScheduleInfo
 {
   enum schedqueue level;
-  int time_slice;
   int burst_time;
+  int last_exe_time;
   uint creation_time;
   uint enter_level_time;
   int confidence;
@@ -52,6 +52,7 @@ struct ScheduleInfo
 
 #define MAX_SYSCALLS 27
 #define NUM_QUEUES 3
+#define STARVATION_THRESHOLD 800
 
 struct proc {
   int syscalls[MAX_SYSCALLS];
