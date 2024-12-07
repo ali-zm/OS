@@ -104,7 +104,18 @@ trap(struct trapframe *tf)
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER)
-    yield();
+    if(myproc()->sched_info.num_of_cycles<5)
+      myproc()->sched_info.num_of_cycles++;
+    else
+    {
+      cprintf("pid: ");
+      cprintf("%d", myproc()->pid);
+      cprintf(" ticks: ");
+      cprintf("%d",ticks);
+      cprintf("\n");
+      myproc()->sched_info.num_of_cycles = 0;
+      yield();
+    }
 
   // Check if the process has been killed since we yielded
   if(myproc() && myproc()->killed && (tf->cs&3) == DPL_USER)

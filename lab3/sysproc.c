@@ -216,7 +216,10 @@ void sys_show_process_info()
   show_process_info();
 }
 
-void sys_set_burst_confidence(int pid, int burst, int conf)
+void sys_set_burst_confidence(void)
 {
-  set_burst_confidence();
+  int pid, burst, conf;
+  if(argint(0,&pid)<0||argint(1,&burst)<0|| argint(2,&conf)<0)
+    return;
+  set_burst_confidence(pid, burst, conf);
 }

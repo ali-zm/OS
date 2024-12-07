@@ -45,6 +45,7 @@ struct ScheduleInfo
   uint creation_time;
   uint enter_level_time;
   int confidence;
+  int num_of_cycles;
 };
 
 

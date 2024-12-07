@@ -144,7 +144,8 @@ found:
   p->sched_info.creation_time = ticks;
   p->sched_info.enter_level_time = ticks;
   p->sched_info.last_exe_time = 0;
-  p->sched_info.level = ROUND_ROBIN;
+  p->sched_info.level = SJF;
+  p->sched_info.num_of_cycles = 0;
   
 
 
@@ -371,7 +372,7 @@ int wait(void)
 
 int create_rand_num(int seed)
 {
-  return (ticks*ticks)%seed;
+  return (ticks*ticks*ticks)%seed;
 }
 
 struct proc* short_job_first()
@@ -382,7 +383,6 @@ struct proc* short_job_first()
   {
     if((p->state != RUNNABLE) || (p->sched_info.level!=SJF))
       continue;
-    
     if(p->sched_info.confidence > create_rand_num(100))
     {
       if(res == 0)
@@ -425,29 +425,29 @@ int set_level(int pid, int target_level)
 
 void aging()
 {
-  struct proc *p;
-  acquire(&ptable.lock);
-  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-  {
-    if (p->state == RUNNABLE)
-    {
-      if( p->sched_info.level == ROUND_ROBIN)
-        continue;
-      if (ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD)
-      {
-        {
-          release(&ptable.lock);
-          if(p->sched_info.level == SJF)
-            set_level(p->pid, ROUND_ROBIN);
-          else if(p->sched_info.level == FCFS)
-            set_level(p->pid, SJF);
-          acquire(&ptable.lock);
-        }
-      }  
+  // struct proc *p;
+  // acquire(&ptable.lock);
+  // for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  // {
+  //   if (p->state == RUNNABLE)
+  //   {
+  //     if( p->sched_info.level == ROUND_ROBIN)
+  //       continue;
+  //     if (ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD)
+  //     {
+  //       {
+  //         release(&ptable.lock);
+  //         if(p->sched_info.level == SJF)
+  //           set_level(p->pid, ROUND_ROBIN);
+  //         else if(p->sched_info.level == FCFS)
+  //           set_level(p->pid, SJF);
+  //         acquire(&ptable.lock);
+  //       }
+  //     }  
       
-    }
-  }
-  release(&ptable.lock);
+  //   }
+  // }
+  // release(&ptable.lock);
 }
 
 struct proc *
@@ -796,7 +796,9 @@ void show_process_info()
 
 void set_burst_confidence(int pid, int burst, int conf)
 {
-  struct proc* p = findproc(pid);
+  struct proc *p = findproc(pid);
   p->sched_info.burst_time = burst;
   p->sched_info.confidence = conf;
+  cprintf("pid: %d new_burst: %d new_confidence: %d\n", pid, p->sched_info.burst_time, p->sched_info.confidence);
+  return 0;
 }
