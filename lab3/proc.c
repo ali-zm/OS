@@ -471,7 +471,7 @@ round_robin(struct proc *last_scheduled)
 
 void scheduler(void)
 {
-  struct proc *p;
+  struct proc *p=0;
   
   struct cpu *c = mycpu();
   struct proc *last_scheduled_RR = &ptable.proc[NPROC - 1];
@@ -483,30 +483,26 @@ void scheduler(void)
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-
-    p = round_robin(last_scheduled_RR);
-
-    // if(p!=0 && p!=1 && p!=2)
-    //       cprintf("round: %d\n", p->pid);
-
-
-
+    if(mycpu()->rr>0)
+      p = round_robin(last_scheduled_RR);
+    
     if (p)
       last_scheduled_RR = p;
     else
     {
-      p = short_job_first();
-      
+      if(mycpu()->sjf>0)
+        p = short_job_first();
 
-      // if(p!=0 && p->pid!=1 && p->pid!=2)
-      //     cprintf("sjf: %d\n", p->pid);
-      
       
       if (!p)
       {
-        p = first_come_first_service();
+        if(mycpu()->fcfs>0)
+          p = first_come_first_service();
         if (!p)
         {
+          mycpu()->rr = 30;
+          mycpu()->sjf = 20;
+          mycpu()->fcfs = 10;
           release(&ptable.lock);
           continue;
         }
@@ -763,7 +759,7 @@ void show_process_info()
       [RUNNING] "running",
       [ZOMBIE] "zombie"};
 
-  static int columns[] = {24, 10, 10, 10, 10, 10, 10, 12};
+  static int columns[] = {24, 10, 10, 10, 10, 10, 15, 12};
   cprintf("Process_Name            PID     State    Queue   Burst_time   Last_exe   Enterance_time   confidence\n"
           "----------------------------------------------------------------------------------------\n");
 

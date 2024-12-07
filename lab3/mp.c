@@ -108,6 +108,9 @@ mpinit(void)
       proc = (struct mpproc*)p;
       if(ncpu < NCPU) {
         cpus[ncpu].apicid = proc->apicid;  // apicid may differ from ncpu
+        cpus[ncpu].rr = 30;
+        cpus[ncpu].sjf = 20;
+        cpus[ncpu].fcfs = 10;
         ncpu++;
       }
       p += sizeof(struct mpproc);

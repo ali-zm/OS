@@ -104,6 +104,14 @@ trap(struct trapframe *tf)
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER)
+  {
+    if(myproc()->sched_info.level == ROUND_ROBIN)
+      mycpu()->rr--;
+    else if(myproc()->sched_info.level == SJF)
+      mycpu()->sjf--;
+    else if(myproc()->sched_info.level == FCFS)
+      mycpu()->fcfs--;
+
     if(myproc()->sched_info.num_of_cycles<5)
       myproc()->sched_info.num_of_cycles++;
     else
@@ -118,6 +126,7 @@ trap(struct trapframe *tf)
       myproc()->sched_info.num_of_cycles = 0;
       yield();
     }
+  }
 
   // Check if the process has been killed since we yielded
   if(myproc() && myproc()->killed && (tf->cs&3) == DPL_USER)
