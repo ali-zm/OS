@@ -144,7 +144,7 @@ found:
   p->sched_info.creation_time = ticks;
   p->sched_info.enter_level_time = ticks;
   p->sched_info.last_exe_time = 0;
-  p->sched_info.level = SJF;
+  p->sched_info.level = FCFS;
   p->sched_info.num_of_cycles = 0;
   
 
@@ -383,11 +383,11 @@ struct proc* short_job_first()
   {
     if((p->state != RUNNABLE) || (p->sched_info.level!=SJF))
       continue;
+    if(res == 0)
+      res = p;
     if(p->sched_info.confidence > create_rand_num(100))
     {
-      if(res == 0)
-        res = p;
-      else if(p->sched_info.burst_time < res->sched_info.burst_time)
+      if(p->sched_info.burst_time < res->sched_info.burst_time)
         res = p;
     }
   }
@@ -425,29 +425,30 @@ int set_level(int pid, int target_level)
 
 void aging()
 {
-  // struct proc *p;
-  // acquire(&ptable.lock);
-  // for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-  // {
-  //   if (p->state == RUNNABLE)
-  //   {
-  //     if( p->sched_info.level == ROUND_ROBIN)
-  //       continue;
-  //     if (ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD)
-  //     {
-  //       {
-  //         release(&ptable.lock);
-  //         if(p->sched_info.level == SJF)
-  //           set_level(p->pid, ROUND_ROBIN);
-  //         else if(p->sched_info.level == FCFS)
-  //           set_level(p->pid, SJF);
-  //         acquire(&ptable.lock);
-  //       }
-  //     }  
+  struct proc *p;
+  acquire(&ptable.lock);
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->state == RUNNABLE)
+    {
+      if( p->sched_info.level == ROUND_ROBIN)
+        continue;
+      if ((ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD) && (ticks - p->sched_info.enter_level_time > STARVATION_THRESHOLD))
+      {
+        {
+          release(&ptable.lock);
+          if(p->sched_info.level == SJF)
+            set_level(p->pid, ROUND_ROBIN);
+          else if(p->sched_info.level == FCFS)
+            set_level(p->pid, SJF);
+          cprintf("pid: %d starved!\n", p->pid);
+          acquire(&ptable.lock);
+        }
+      }  
       
-  //   }
-  // }
-  // release(&ptable.lock);
+    }
+  }
+  release(&ptable.lock);
 }
 
 struct proc *
@@ -485,11 +486,22 @@ void scheduler(void)
 
     p = round_robin(last_scheduled_RR);
 
+    // if(p!=0 && p!=1 && p!=2)
+    //       cprintf("round: %d\n", p->pid);
+
+
+
     if (p)
       last_scheduled_RR = p;
     else
     {
       p = short_job_first();
+      
+
+      // if(p!=0 && p->pid!=1 && p->pid!=2)
+      //     cprintf("sjf: %d\n", p->pid);
+      
+      
       if (!p)
       {
         p = first_come_first_service();

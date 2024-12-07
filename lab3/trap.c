@@ -112,6 +112,8 @@ trap(struct trapframe *tf)
       cprintf("%d", myproc()->pid);
       cprintf(" ticks: ");
       cprintf("%d",ticks);
+      cprintf(" level: ");
+      cprintf("%d",myproc()->sched_info.level);
       cprintf("\n");
       myproc()->sched_info.num_of_cycles = 0;
       yield();

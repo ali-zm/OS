@@ -10,17 +10,17 @@
 void test()
 {
     int count = 0;
-    // while(count<100000000) //for test FCFS
-    // {
-    //     count++;
-    //     printf(1,"");
-    // }
-    // count = 0;
-    while(count<100000000000000) //for test round_robin
+    while(count<100000000) //for test FCFS
     {
         count++;
         printf(1,"");
     }
+    count = 0;
+    // while(count<100000000000000) //for test round_robin
+    // {
+    //     count++;
+    //     printf(1,"");
+    // }
 
 }
 
@@ -31,6 +31,8 @@ int main()
         int pid = fork();
         // if(pid==6)  //check SJF
         //     set_burst_confidence(pid,1,99);
+        // if(pid==7)  //check SJF note : change all procresses confidence to 99 so burst time will show itself
+        //     set_burst_confidence(pid,3,99);
         if (pid == 0)
         {
             
