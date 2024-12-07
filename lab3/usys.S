@@ -34,3 +34,8 @@ SYSCALL(get_most_syscalls)
 SYSCALL(list_active_processes)
 SYSCALL(move_file)
 SYSCALL(create_palindrome)
+SYSCALL(set_level)
+SYSCALL(show_process_info)
+SYSCALL(set_burst_confidence)
+
+

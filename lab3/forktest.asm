@@ -52,11 +52,11 @@ main(void)
 {
   46:	83 ec 10             	sub    $0x10,%esp
   write(fd, s, strlen(s));
-  49:	68 3c 04 00 00       	push   $0x43c
+  49:	68 54 04 00 00       	push   $0x454
   4e:	e8 5d 01 00 00       	call   1b0 <strlen>
   53:	83 c4 0c             	add    $0xc,%esp
   56:	50                   	push   %eax
-  57:	68 3c 04 00 00       	push   $0x43c
+  57:	68 54 04 00 00       	push   $0x454
   5c:	6a 01                	push   $0x1
   5e:	e8 30 03 00 00       	call   393 <write>
   63:	83 c4 10             	add    $0x10,%esp
@@ -91,11 +91,11 @@ main(void)
   a6:	75 49                	jne    f1 <forktest+0xb1>
   write(fd, s, strlen(s));
   a8:	83 ec 0c             	sub    $0xc,%esp
-  ab:	68 6e 04 00 00       	push   $0x46e
+  ab:	68 86 04 00 00       	push   $0x486
   b0:	e8 fb 00 00 00       	call   1b0 <strlen>
   b5:	83 c4 0c             	add    $0xc,%esp
   b8:	50                   	push   %eax
-  b9:	68 6e 04 00 00       	push   $0x46e
+  b9:	68 86 04 00 00       	push   $0x486
   be:	6a 01                	push   $0x1
   c0:	e8 ce 02 00 00       	call   393 <write>
 }
@@ -106,11 +106,11 @@ main(void)
   ca:	e8 a4 02 00 00       	call   373 <exit>
   write(fd, s, strlen(s));
   cf:	83 ec 0c             	sub    $0xc,%esp
-  d2:	68 47 04 00 00       	push   $0x447
+  d2:	68 5f 04 00 00       	push   $0x45f
   d7:	e8 d4 00 00 00       	call   1b0 <strlen>
   dc:	83 c4 0c             	add    $0xc,%esp
   df:	50                   	push   %eax
-  e0:	68 47 04 00 00       	push   $0x447
+  e0:	68 5f 04 00 00       	push   $0x45f
   e5:	6a 01                	push   $0x1
   e7:	e8 a7 02 00 00       	call   393 <write>
       exit();
@@ -118,7 +118,7 @@ main(void)
     printf(1, "wait got too many\n");
   f1:	52                   	push   %edx
   f2:	52                   	push   %edx
-  f3:	68 5b 04 00 00       	push   $0x45b
+  f3:	68 73 04 00 00       	push   $0x473
   f8:	6a 01                	push   $0x1
   fa:	e8 11 ff ff ff       	call   10 <printf>
     exit();
@@ -126,7 +126,7 @@ main(void)
     printf(1, "fork claimed to work N times!\n", N);
  104:	50                   	push   %eax
  105:	68 e8 03 00 00       	push   $0x3e8
- 10a:	68 7c 04 00 00       	push   $0x47c
+ 10a:	68 94 04 00 00       	push   $0x494
  10f:	6a 01                	push   $0x1
  111:	e8 fa fe ff ff       	call   10 <printf>
     exit();
@@ -689,3 +689,21 @@ SYSCALL(create_palindrome)
  433:	b8 16 00 00 00       	mov    $0x16,%eax
  438:	cd 40                	int    $0x40
  43a:	c3                   	ret    
+
+0000043b <set_level>:
+SYSCALL(set_level)
+ 43b:	b8 1b 00 00 00       	mov    $0x1b,%eax
+ 440:	cd 40                	int    $0x40
+ 442:	c3                   	ret    
+
+00000443 <show_process_info>:
+SYSCALL(show_process_info)
+ 443:	b8 1c 00 00 00       	mov    $0x1c,%eax
+ 448:	cd 40                	int    $0x40
+ 44a:	c3                   	ret    
+
+0000044b <set_burst_confidence>:
+SYSCALL(set_burst_confidence)
+ 44b:	b8 1d 00 00 00       	mov    $0x1d,%eax
+ 450:	cd 40                	int    $0x40
+ 452:	c3                   	ret    

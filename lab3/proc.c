@@ -139,6 +139,15 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  p->sched_info.burst_time = 2;
+  p->sched_info.confidence = 50;
+  p->sched_info.creation_time = ticks;
+  p->sched_info.enter_level_time = ticks;
+  p->sched_info.last_exe_time = 0;
+  p->sched_info.level = ROUND_ROBIN;
+  
+
+
   return p;
 }
 
@@ -177,6 +186,7 @@ void userinit(void)
   p->state = RUNNABLE;
 
   release(&ptable.lock);
+  set_level(p->pid, ROUND_ROBIN);
 }
 
 // Grow current process's memory by n bytes.
@@ -245,7 +255,11 @@ int fork(void)
 
   np->state = RUNNABLE;
 
+
   release(&ptable.lock);
+
+  if(pid==2)
+    set_level(pid, ROUND_ROBIN);
 
   return pid;
 }
@@ -354,30 +368,15 @@ int wait(void)
 //   - swtch to start running that process
 //   - eventually that process transfers control
 //       via swtch back to the scheduler.
-struct proc *round_robin(struct proc *last)
-{
-  struct proc *p;
-  for (int i = 1; i < NPROC; i++)
-  {
-    p = last + i;
-
-    if (p >= &ptable.proc[NPROC])
-      p -= NPROC;
-
-    if (p->state == RUNNABLE && p->sched_info.level == ROUND_ROBIN)
-      return p;
-  }
-  return -1;
-}
 
 int create_rand_num(int seed)
 {
   return (ticks*ticks)%seed;
 }
 
-struct proc *short_job_first()
+struct proc* short_job_first()
 {
-  struct proc* res=-1;
+  struct proc* res=0;
   struct proc* p;
   for(p=ptable.proc; p<&ptable.proc[NPROC]; p++)
   {
@@ -386,7 +385,7 @@ struct proc *short_job_first()
     
     if(p->sched_info.confidence > create_rand_num(100))
     {
-      if(res == -1)
+      if(res == 0)
         res = p;
       else if(p->sched_info.burst_time < res->sched_info.burst_time)
         res = p;
@@ -395,15 +394,15 @@ struct proc *short_job_first()
   return res;
 }
 
-struct proc *first_come_first_service()
+struct proc* first_come_first_service()
 {
-  struct proc* res=-1;
+  struct proc* res=0;
   struct proc* p;
   for(p=ptable.proc; p<&ptable.proc[NPROC]; p++)
   {
     if((p->state != RUNNABLE) || (p->sched_info.level!=FCFS))
       continue;
-    if(res == -1)
+    if(res == 0)
       res = p;
     else if(p->sched_info.enter_level_time<res->sched_info.enter_level_time)
       res = p;
@@ -411,7 +410,20 @@ struct proc *first_come_first_service()
   return res;
 }
 
-void aging(int os_ticks)
+int set_level(int pid, int target_level)
+{
+  struct proc *p = findproc(pid);
+  acquire(&ptable.lock);
+
+  int old_queue = p->sched_info.level;
+  p->sched_info.level = target_level;
+  p->sched_info.enter_level_time = ticks;
+
+  release(&ptable.lock);
+  return old_queue;
+}
+
+void aging()
 {
   struct proc *p;
   acquire(&ptable.lock);
@@ -421,14 +433,14 @@ void aging(int os_ticks)
     {
       if( p->sched_info.level == ROUND_ROBIN)
         continue;
-      if (os_ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD)
+      if (ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD)
       {
         {
           release(&ptable.lock);
           if(p->sched_info.level == SJF)
-            change_Q(p->pid, ROUND_ROBIN);
+            set_level(p->pid, ROUND_ROBIN);
           else if(p->sched_info.level == FCFS)
-            change_Q(p->pid, SJF);
+            set_level(p->pid, SJF);
           acquire(&ptable.lock);
         }
       }  
@@ -438,67 +450,76 @@ void aging(int os_ticks)
   release(&ptable.lock);
 }
 
+struct proc *
+round_robin(struct proc *last_scheduled)
+{
+  struct proc *p = last_scheduled;
+  for (;;)
+  {
+    p++;
+    if (p >= &ptable.proc[NPROC])
+      p = ptable.proc;
+    if (p->state == RUNNABLE && p->sched_info.level == ROUND_ROBIN)
+      return p;
+
+    if (p == last_scheduled)
+      return 0;
+  }
+  return 0;
+}
+
 void scheduler(void)
 {
   struct proc *p;
+  
   struct cpu *c = mycpu();
-  struct proc *last_sched = ptable.proc;
+  struct proc *last_scheduled_RR = &ptable.proc[NPROC - 1];
   c->proc = 0;
 
   for (;;)
   {
-    // Enable interrupts on this processor.
     sti();
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
 
-    for (int q = 0; q < NUM_QUEUES;)
+    p = round_robin(last_scheduled_RR);
+
+    if (p)
+      last_scheduled_RR = p;
+    else
     {
-      switch (q)
+      p = short_job_first();
+      if (!p)
       {
-      case 0:
-        p = round_robin(last_sched);
-        if (p != -1)
-          last_sched = p;
-        else
-          q++;
-        break;
-
-      case 1:
-        p = short_job_first();
-        if (p != -1)
-          last_sched = p;
-        else
-          q++;
-
-        break;
-
-      case 2:
         p = first_come_first_service();
-        if (p != -1)
-          last_sched = p;
-        else
-          q++;
-        break;
-
-      default:
-        break;
+        if (!p)
+        {
+          release(&ptable.lock);
+          continue;
+        }
       }
     }
 
+    // Switch to chosen process.  It is the process's job
+    // to release ptable.lock and then reacquire it
+    // before jumping back to us.
+
     c->proc = p;
     switchuvm(p);
+
     p->state = RUNNING;
+
+    p->sched_info.last_exe_time = ticks;
+
+
     swtch(&(c->scheduler), p->context);
     switchkvm();
-
-    // Process is done running for now.
-    // It should have changed its p->state before coming back.
     c->proc = 0;
+  release(&ptable.lock);
+
   }
 }
-
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
 // intena because intena is a property of this
@@ -700,4 +721,82 @@ int list_active_processes(void)
   release(&ptable.lock);
 
   return 0; // Return 0 to indicate success
+}
+
+
+void
+space(int count)
+{
+  for(int i = 0; i < count; ++i)
+    cprintf(" ");
+}
+
+int num_digits(int n) {
+  int num = 0;
+  while(n!= 0) {
+    n/=10;
+    num += 1;
+  }
+  return num;
+}
+
+void show_process_info()
+{
+
+  static char *states[] = {
+      [UNUSED] "unused",
+      [EMBRYO] "embryo",
+      [SLEEPING] "sleeping",
+      [RUNNABLE] "runnable",
+      [RUNNING] "running",
+      [ZOMBIE] "zombie"};
+
+  static int columns[] = {24, 10, 10, 10, 10, 10, 10, 12};
+  cprintf("Process_Name            PID     State    Queue   Burst_time   Last_exe   Enterance_time   confidence\n"
+          "----------------------------------------------------------------------------------------\n");
+
+  struct proc *p;
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->state == UNUSED)
+      continue;
+
+    const char *state;
+    if (p->state >= 0 && p->state < NELEM(states) && states[p->state])
+      state = states[p->state];
+    else
+      state = "unknown state";
+
+    cprintf("%s", p->name);
+    space(columns[0] - strlen(p->name));
+
+    cprintf("%d", p->pid);
+    space(columns[1] - num_digits(p->pid));
+
+    cprintf("%s", state);
+    space(columns[2] - strlen(state));
+
+    cprintf("%d", p->sched_info.level);
+    space(columns[3] - num_digits(p->sched_info.level));
+
+    cprintf("%d", (int)p->sched_info.burst_time);
+    space(columns[4] - num_digits((int)p->sched_info.burst_time));
+
+    cprintf("%d", p->sched_info.last_exe_time);
+    space(columns[5] - num_digits(p->sched_info.last_exe_time));
+
+    cprintf("%d", p->sched_info.enter_level_time);
+    space(columns[6] - num_digits(p->sched_info.enter_level_time));
+
+    cprintf("%d", (int)p->sched_info.confidence);
+    space(columns[7] - num_digits((int)p->sched_info.confidence));
+    cprintf("\n");
+  }
+}
+
+void set_burst_confidence(int pid, int burst, int conf)
+{
+  struct proc* p = findproc(pid);
+  p->sched_info.burst_time = burst;
+  p->sched_info.confidence = conf;
 }

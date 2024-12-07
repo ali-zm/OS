@@ -28,6 +28,7 @@ int get_most_syscalls(int pid);
 int list_active_processes(void);
 int move_file(const char*, const char*);
 void create_palindrome(int num);
+int set_level(int pid, int new_level);
 
 // ulib.c
 int stat(const char*, struct stat*);
@@ -42,3 +43,5 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
+void show_process_info(void);   
+void set_burst_confidence(void);

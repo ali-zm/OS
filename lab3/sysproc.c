@@ -204,3 +204,19 @@ int sys_list_active_processes(void) {
     list_active_processes();
     return 0;  // Return 0 to indicate success
 }
+
+int sys_set_level(int pid, int level)
+{
+  int res = set_level(pid,level);
+  return res;
+}
+
+void sys_show_process_info()
+{
+  show_process_info();
+}
+
+void sys_set_burst_confidence(int pid, int burst, int conf)
+{
+  set_burst_confidence();
+}

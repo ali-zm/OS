@@ -109,6 +109,9 @@ extern int sys_sort_syscalls(void);
 extern int sys_get_most_syscalls(void);
 extern int sys_list_active_processes(void);
 extern int sys_create_palindrome(void);
+extern int sys_set_level(void);
+extern int sys_show_process_info(void);
+extern int sys_set_burst_confidence(void);
 
 
 static int (*syscalls[])(void) = {
@@ -138,6 +141,9 @@ static int (*syscalls[])(void) = {
 [SYS_get_most_syscalls] sys_get_most_syscalls,
 [SYS_list_active_processes] sys_list_active_processes,
 [SYS_create_palindrome] sys_create_palindrome,
+[SYS_set_level] sys_set_level,
+[SYS_show_process_info] sys_show_process_info,
+[SYS_set_burst_confidence] sys_set_burst_confidence,
 };
 
 void

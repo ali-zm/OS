@@ -25,4 +25,7 @@
 #define SYS_sort_syscalls 24
 #define SYS_get_most_syscalls 25
 #define SYS_list_active_processes 26
+#define SYS_set_level 27
+#define SYS_show_process_info 28
+#define SYS_set_burst_confidence 29
 

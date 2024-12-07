@@ -13,6 +13,8 @@
 
 #define MAXARGS 10
 
+enum schedqueue {ROUND_ROBIN, SJF, FCFS, NONE};
+
 struct cmd {
   int type;
 };
@@ -76,6 +78,7 @@ runcmd(struct cmd *cmd)
     if(ecmd->argv[0] == 0)
       exit();
     exec(ecmd->argv[0], ecmd->argv);
+    
     printf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
 
@@ -164,7 +167,8 @@ main(void)
         printf(2, "cannot cd %s\n", buf+3);
       continue;
     }
-    if(fork1() == 0)
+    int  pid= fork1();
+    if(pid == 0)
       runcmd(parsecmd(buf));
     wait();
   }
@@ -184,6 +188,7 @@ fork1(void)
   int pid;
 
   pid = fork();
+    
   if(pid == -1)
     panic("fork");
   return pid;
