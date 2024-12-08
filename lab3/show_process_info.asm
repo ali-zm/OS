@@ -27,7 +27,7 @@ int main()
         //     set_burst_confidence(pid,1,99);
         // if(pid==7)  //check SJF note : change all procresses confidence to 99 so burst time will show itself
         //     set_burst_confidence(pid,3,99);
-        if(pid==6)  //check time slicing
+        if(pid==6)  //check multilevel time slicing
   19:	83 f8 06             	cmp    $0x6,%eax
   1c:	74 32                	je     50 <main+0x50>
             set_level(pid,0);
@@ -85,7 +85,7 @@ int main()
   83:	68 be 07 00 00       	push   $0x7be
   88:	6a 01                	push   $0x1
   8a:	e8 01 04 00 00       	call   490 <printf>
-    while(count<100000000) //for test FCFS
+    while(count<100000000) //for test FCFS and sjf and multilevel
   8f:	83 c4 10             	add    $0x10,%esp
   92:	83 eb 01             	sub    $0x1,%ebx
   95:	75 e9                	jne    80 <test+0x10>

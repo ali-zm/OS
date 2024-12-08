@@ -433,7 +433,8 @@ void aging()
     {
       if( p->sched_info.level == ROUND_ROBIN)
         continue;
-      if ((ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD) && (ticks - p->sched_info.enter_level_time > STARVATION_THRESHOLD))
+      if ((ticks - p->sched_info.last_exe_time > STARVATION_THRESHOLD) &&
+         (ticks - p->sched_info.enter_level_time > STARVATION_THRESHOLD))
       {
         {
           release(&ptable.lock);
@@ -471,29 +472,23 @@ round_robin(struct proc *last_scheduled)
 
 void scheduler(void)
 {
-  
   struct proc *p;
   struct cpu *c = mycpu();
   struct proc *last_scheduled_RR = &ptable.proc[NPROC - 1];
   c->proc = 0;
-
   for (;;)
   {
     sti();
     p = 0;
-    // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     if(mycpu()->rr>0)
       p = round_robin(last_scheduled_RR);
-    
     if (p)
       last_scheduled_RR = p;
     else
     {
       if(mycpu()->sjf>0)
         p = short_job_first();
-
-      
       if (!p)
       {
         if(mycpu()->fcfs>0)
@@ -508,24 +503,14 @@ void scheduler(void)
         }
       }
     }
-
-    // Switch to chosen process.  It is the process's job
-    // to release ptable.lock and then reacquire it
-    // before jumping back to us.
-
     c->proc = p;
     switchuvm(p);
-
     p->state = RUNNING;
-
     p->sched_info.last_exe_time = ticks;
-
-
     swtch(&(c->scheduler), p->context);
     switchkvm();
     c->proc = 0;
   release(&ptable.lock);
-
   }
 }
 // Enter scheduler.  Must hold only ptable.lock
@@ -759,8 +744,8 @@ void show_process_info()
       [RUNNING] "running",
       [ZOMBIE] "zombie"};
 
-  static int columns[] = {24, 10, 10, 10, 10, 10, 15, 12};
-  cprintf("Process_Name            PID     State    Queue   Burst_time   Last_exe   Enterance_time   confidence\n"
+  static int columns[] = {24, 10, 10, 10, 10, 10, 15, 12, 12};
+  cprintf("Process_Name            PID     State    Queue   Burst_time   waiting   Enterance_time   confidence    consecutive_run\n"
           "----------------------------------------------------------------------------------------\n");
 
   struct proc *p;
@@ -790,14 +775,17 @@ void show_process_info()
     cprintf("%d", (int)p->sched_info.burst_time);
     space(columns[4] - num_digits((int)p->sched_info.burst_time));
 
-    cprintf("%d", p->sched_info.last_exe_time);
-    space(columns[5] - num_digits(p->sched_info.last_exe_time));
+    cprintf("%d", ticks - p->sched_info.last_exe_time);
+    space(columns[5] - num_digits(ticks - p->sched_info.last_exe_time));
 
     cprintf("%d", p->sched_info.enter_level_time);
     space(columns[6] - num_digits(p->sched_info.enter_level_time));
 
     cprintf("%d", (int)p->sched_info.confidence);
     space(columns[7] - num_digits((int)p->sched_info.confidence));
+
+    cprintf("%d", (int)p->sched_info.num_of_cycles);
+    space(columns[7] - num_digits((int)p->sched_info.num_of_cycles));
     cprintf("\n");
   }
 }
