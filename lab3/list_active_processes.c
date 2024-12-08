@@ -1,51 +1,23 @@
-
-
 #include "types.h"
-#include "user.h"
 #include "stat.h"
+#include "user.h"
+#define MAX_SYSCALLS 27
 
+int main(void) {
+    
+    printf(1, "first write system call\n");  // This calls write
 
-#define PROCS_NUM 5
-
-void test()
-{
-    int count = 0;
-    while(count<100000000) //for test FCFS
+    int pid = getpid();
+    if (fork() == 0) 
     {
-        count++;
-        printf(1,"");
-    }
-    count = 0;
-    // while(count<100000000000000) //for test round_robin
-    // {
-    //     count++;
-    //     printf(1,"");
-    // }
-
-}
-
-int main()
-{
-    for (int i = 0; i < PROCS_NUM; ++i)
-    {
-        int pid = fork();
-        // if(pid==6)  //check SJF
-        //     set_burst_confidence(pid,1,99);
-        // if(pid==7)  //check SJF note : change all procresses confidence to 99 so burst time will show itself
-        //     set_burst_confidence(pid,3,99);
-        if(pid==6)  //check time slicing
-            set_level(pid,0);
-
-        if (pid == 0)
-        {
-            
-            test();
-            exit();
-        }
-    }
-    show_process_info();
-    for (int i = 0; i < PROCS_NUM; i++)
+        printf(1, "In child process\n");
+        exit();
+    } 
+    else 
         wait();
-    show_process_info();
+    sleep(10);
+
+    list_active_processes();
+
     exit();
 }

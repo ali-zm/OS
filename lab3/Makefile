@@ -191,6 +191,7 @@ UPROGS=\
 	_list_active_processes\
 	_test_palindrome\
 	_test_gdb\
+	_show_process_info\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
