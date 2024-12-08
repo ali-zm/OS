@@ -205,8 +205,11 @@ int sys_list_active_processes(void) {
     return 0;  // Return 0 to indicate success
 }
 
-int sys_set_level(int pid, int level)
+int sys_set_level(void)
 {
+  int pid, level;
+  if(argint(0,&pid)<0||argint(1,&level)<0)
+    return;
   int res = set_level(pid,level);
   return res;
 }

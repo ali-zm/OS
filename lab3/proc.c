@@ -471,8 +471,8 @@ round_robin(struct proc *last_scheduled)
 
 void scheduler(void)
 {
-  struct proc *p=0;
   
+  struct proc *p;
   struct cpu *c = mycpu();
   struct proc *last_scheduled_RR = &ptable.proc[NPROC - 1];
   c->proc = 0;
@@ -480,7 +480,7 @@ void scheduler(void)
   for (;;)
   {
     sti();
-
+    p = 0;
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     if(mycpu()->rr>0)
