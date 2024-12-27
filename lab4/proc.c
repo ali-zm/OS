@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "syscall.h"
 
 struct
 {
@@ -797,4 +798,23 @@ void set_burst_confidence(int pid, int burst, int conf)
   p->sched_info.confidence = conf;
   cprintf("pid: %d new_burst: %d new_confidence: %d\n", pid, p->sched_info.burst_time, p->sched_info.confidence);
   return 0;
+}
+
+void add_cpu_syscalls(uint my_eax)
+{
+  if(my_eax == SYS_open)
+    mycpu()->count_syscalls += 3;
+  if(my_eax == SYS_write)
+    mycpu()->count_syscalls += 2;
+  else
+    mycpu()->count_syscalls += 1;
+
+}
+
+int sum_all_cpus_syscalls()
+{
+  int count = 0;
+  for(int i=0; i<NCPU; i++)
+    count += cpus[i].count_syscalls;
+  return count;
 }

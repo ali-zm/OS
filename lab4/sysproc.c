@@ -238,3 +238,8 @@ int sys_count_syscalls_all_cpus(void)
   return count;
 
 }
+
+int sys_sum_all_cpus_syscalls(void)
+{
+  return sum_all_cpus_syscalls();
+}

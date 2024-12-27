@@ -7,6 +7,7 @@
 #include "x86.h"
 #include "traps.h"
 #include "spinlock.h"
+#include "syscall.h"
 
 // Interrupt descriptor table (shared by all CPUs).
 struct gatedesc idt[256];
@@ -40,15 +41,29 @@ void
 trap(struct trapframe *tf)
 {
   if(tf->trapno == T_SYSCALL){
+
+    
     if(myproc()->killed)
       exit();
 
+    uint my_eax = tf->eax;
+
     acquire(&syscallslock);
-    syscalls_count++;
+    if(my_eax == SYS_open)
+      syscalls_count+=3;
+    if(my_eax == SYS_write)
+      syscalls_count+=2;
+    else
+      syscalls_count++;
+    add_cpu_syscalls(my_eax);
     release(&syscallslock);
+
 
     myproc()->tf = tf;
     syscall();
+
+    
+
     if(myproc()->killed)
       exit();
     return;

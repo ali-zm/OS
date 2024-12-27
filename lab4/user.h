@@ -32,6 +32,7 @@ void create_palindrome(int num);
 int set_level(int pid, int new_level);
 void set_burst_confidence(int pid, int burst, int conf);
 int count_syscalls_all_cpus();
+int sum_all_cpus_syscalls();
 
 
 // ulib.c

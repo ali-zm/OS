@@ -11,6 +11,7 @@ struct cpu {
   int rr;
   int sjf;
   int fcfs;
+  uint count_syscalls;
 };
 
 extern struct cpu cpus[NCPU];
@@ -81,6 +82,7 @@ struct proc {
 
 int list_active_processes(void);
 struct proc* findproc(int pid);
+void add_cpu_syscalls(uint my_eax);
 // Process memory is laid out contiguously, low addresses first:
 //   text
 //   original data and bss

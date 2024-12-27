@@ -113,6 +113,7 @@ extern int sys_set_level(void);
 extern int sys_show_process_info(void);
 extern int sys_set_burst_confidence(void);
 extern int sys_count_syscalls_all_cpus(void);
+extern int sys_sum_all_cpus_syscalls(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -145,6 +146,7 @@ static int (*syscalls[])(void) = {
 [SYS_show_process_info] sys_show_process_info,
 [SYS_set_burst_confidence] sys_set_burst_confidence,
 [SYS_count_syscalls_all_cpus] sys_count_syscalls_all_cpus,
+[SYS_sum_all_cpus_syscalls] sys_sum_all_cpus_syscalls,
 };
 
 void
