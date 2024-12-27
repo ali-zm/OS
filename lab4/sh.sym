@@ -58,6 +58,7 @@
 00000e9b dup
 000003c0 pipecmd
 00000370 redircmd
+00000f03 count_syscalls_all_cpus
 00000ed3 list_active_processes
 00000d60 stat
 00001a12 _edata

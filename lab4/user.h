@@ -1,3 +1,4 @@
+#include "types.h"
 struct stat;
 struct rtcdate;
 
@@ -30,6 +31,8 @@ int move_file(const char*, const char*);
 void create_palindrome(int num);
 int set_level(int pid, int new_level);
 void set_burst_confidence(int pid, int burst, int conf);
+int count_syscalls_all_cpus();
+
 
 // ulib.c
 int stat(const char*, struct stat*);

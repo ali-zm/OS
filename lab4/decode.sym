@@ -38,6 +38,7 @@
 000004fb set_level
 00000210 strcmp
 000004ab dup
+00000513 count_syscalls_all_cpus
 000004e3 list_active_processes
 00000370 stat
 00000c20 _edata

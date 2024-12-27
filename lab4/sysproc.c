@@ -226,3 +226,15 @@ void sys_set_burst_confidence(void)
     return;
   set_burst_confidence(pid, burst, conf);
 }
+
+int sys_count_syscalls_all_cpus(void)
+{
+  int count;
+
+  acquire(&syscallslock);
+  count = syscalls_count;
+  release(&syscallslock);
+
+  return count;
+
+}

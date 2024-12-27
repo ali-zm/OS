@@ -624,10 +624,12 @@ SYSCALL(set_burst_confidence)
  37b:	b8 1d 00 00 00       	mov    $0x1d,%eax
  380:	cd 40                	int    $0x40
  382:	c3                   	ret    
- 383:	66 90                	xchg   %ax,%ax
- 385:	66 90                	xchg   %ax,%ax
- 387:	66 90                	xchg   %ax,%ax
- 389:	66 90                	xchg   %ax,%ax
+
+00000383 <count_syscalls_all_cpus>:
+SYSCALL(count_syscalls_all_cpus)
+ 383:	b8 1e 00 00 00       	mov    $0x1e,%eax
+ 388:	cd 40                	int    $0x40
+ 38a:	c3                   	ret    
  38b:	66 90                	xchg   %ax,%ax
  38d:	66 90                	xchg   %ax,%ax
  38f:	90                   	nop

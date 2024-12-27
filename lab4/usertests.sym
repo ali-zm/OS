@@ -70,6 +70,7 @@
 00002d40 sbrktest
 00000400 opentest
 00001d20 subdir
+000039b3 count_syscalls_all_cpus
 00003580 uio
 000015d0 linktest
 000085c0 buf

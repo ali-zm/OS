@@ -2169,10 +2169,12 @@ SYSCALL(set_burst_confidence)
      efb:	b8 1d 00 00 00       	mov    $0x1d,%eax
      f00:	cd 40                	int    $0x40
      f02:	c3                   	ret    
-     f03:	66 90                	xchg   %ax,%ax
-     f05:	66 90                	xchg   %ax,%ax
-     f07:	66 90                	xchg   %ax,%ax
-     f09:	66 90                	xchg   %ax,%ax
+
+00000f03 <count_syscalls_all_cpus>:
+SYSCALL(count_syscalls_all_cpus)
+     f03:	b8 1e 00 00 00       	mov    $0x1e,%eax
+     f08:	cd 40                	int    $0x40
+     f0a:	c3                   	ret    
      f0b:	66 90                	xchg   %ax,%ax
      f0d:	66 90                	xchg   %ax,%ax
      f0f:	90                   	nop

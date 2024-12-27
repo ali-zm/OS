@@ -12,7 +12,9 @@
 struct gatedesc idt[256];
 extern uint vectors[];  // in vectors.S: array of 256 entry pointers
 struct spinlock tickslock;
+struct spinlock syscallslock;
 uint ticks;
+uint syscalls_count;
 
 void
 tvinit(void)
@@ -24,6 +26,7 @@ tvinit(void)
   SETGATE(idt[T_SYSCALL], 1, SEG_KCODE<<3, vectors[T_SYSCALL], DPL_USER);
 
   initlock(&tickslock, "time");
+  initlock(&syscallslock, "syscall_count");
 }
 
 void
@@ -39,6 +42,11 @@ trap(struct trapframe *tf)
   if(tf->trapno == T_SYSCALL){
     if(myproc()->killed)
       exit();
+
+    acquire(&syscallslock);
+    syscalls_count++;
+    release(&syscallslock);
+
     myproc()->tf = tf;
     syscall();
     if(myproc()->killed)

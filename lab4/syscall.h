@@ -28,4 +28,5 @@
 #define SYS_set_level 27
 #define SYS_show_process_info 28
 #define SYS_set_burst_confidence 29
+#define SYS_count_syscalls_all_cpus 30
 

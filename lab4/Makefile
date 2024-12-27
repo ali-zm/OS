@@ -192,6 +192,7 @@ UPROGS=\
 	_test_palindrome\
 	_test_gdb\
 	_show_process_info\
+	_get_count_syscalls_all_cpus\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
