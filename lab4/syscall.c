@@ -7,7 +7,7 @@
 #include "x86.h"
 #include "syscall.h"
 
-
+ 
 // User code makes a system call with INT T_SYSCALL.
 // System call number in %eax.
 // Arguments on the stack, from the user call to the C
@@ -114,6 +114,7 @@ extern int sys_show_process_info(void);
 extern int sys_set_burst_confidence(void);
 extern int sys_count_syscalls_all_cpus(void);
 extern int sys_sum_all_cpus_syscalls(void);
+extern int sys_test_reentrantlock(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -147,6 +148,7 @@ static int (*syscalls[])(void) = {
 [SYS_set_burst_confidence] sys_set_burst_confidence,
 [SYS_count_syscalls_all_cpus] sys_count_syscalls_all_cpus,
 [SYS_sum_all_cpus_syscalls] sys_sum_all_cpus_syscalls,
+[SYS_test_reentrantlock] sys_test_reentrantlock,
 };
 
 void

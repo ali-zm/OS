@@ -30,4 +30,4 @@
 #define SYS_set_burst_confidence 29
 #define SYS_count_syscalls_all_cpus 30
 #define SYS_sum_all_cpus_syscalls 31
-
+#define SYS_test_reentrantlock 32

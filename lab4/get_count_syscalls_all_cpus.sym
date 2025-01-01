@@ -46,6 +46,7 @@
 00000af4 _end
 00000313 link
 000002b3 exit
+000003a3 test_reentrantlock
 00000240 atoi
 000000f0 strlen
 000002f3 open

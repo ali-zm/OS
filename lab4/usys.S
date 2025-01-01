@@ -39,5 +39,5 @@ SYSCALL(show_process_info)
 SYSCALL(set_burst_confidence)
 SYSCALL(count_syscalls_all_cpus)
 SYSCALL(sum_all_cpus_syscalls)
-
+ SYSCALL(test_reentrantlock)
 

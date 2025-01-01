@@ -1,4 +1,7 @@
 // Per-CPU state
+
+
+
 struct cpu {
   uchar apicid;                // Local APIC ID
   struct context *scheduler;   // swtch() here to enter scheduler
@@ -88,3 +91,5 @@ void add_cpu_syscalls(uint my_eax);
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
+
+ 

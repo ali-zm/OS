@@ -1051,10 +1051,12 @@ SYSCALL(sum_all_cpus_syscalls)
  6ab:	b8 1f 00 00 00       	mov    $0x1f,%eax
  6b0:	cd 40                	int    $0x40
  6b2:	c3                   	ret    
- 6b3:	66 90                	xchg   %ax,%ax
- 6b5:	66 90                	xchg   %ax,%ax
- 6b7:	66 90                	xchg   %ax,%ax
- 6b9:	66 90                	xchg   %ax,%ax
+
+000006b3 <test_reentrantlock>:
+ SYSCALL(test_reentrantlock)
+ 6b3:	b8 20 00 00 00       	mov    $0x20,%eax
+ 6b8:	cd 40                	int    $0x40
+ 6ba:	c3                   	ret    
  6bb:	66 90                	xchg   %ax,%ax
  6bd:	66 90                	xchg   %ax,%ax
  6bf:	90                   	nop

@@ -85,6 +85,7 @@
 00001440 unlinkread
 00003933 link
 000038d3 exit
+000039c3 test_reentrantlock
 00003860 atoi
 00001ae0 linkunlink
 000085d0 name

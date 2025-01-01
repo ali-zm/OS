@@ -9,6 +9,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct reentrantlock;//jadid borna
 
 // bio.c
 void            binit(void);
@@ -122,6 +123,10 @@ void            wakeup(void*);
 void            yield(void);
 int             sort_syscalls(void);
 int             get_most_syscalls(void);
+void            initreentrantlock(char*);
+void            acquirereentrantlock();
+void            releasereentrantlock();
+void            initrlock();
 
 // swtch.S
 void            swtch(struct context**, struct context*);
@@ -134,6 +139,8 @@ void            initlock(struct spinlock*, char*);
 void            release(struct spinlock*);
 void            pushcli(void);
 void            popcli(void);
+
+
 
 // sleeplock.c
 void            acquiresleep(struct sleeplock*);

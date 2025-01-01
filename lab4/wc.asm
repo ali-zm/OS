@@ -779,10 +779,12 @@ SYSCALL(sum_all_cpus_syscalls)
  4bb:	b8 1f 00 00 00       	mov    $0x1f,%eax
  4c0:	cd 40                	int    $0x40
  4c2:	c3                   	ret    
- 4c3:	66 90                	xchg   %ax,%ax
- 4c5:	66 90                	xchg   %ax,%ax
- 4c7:	66 90                	xchg   %ax,%ax
- 4c9:	66 90                	xchg   %ax,%ax
+
+000004c3 <test_reentrantlock>:
+ SYSCALL(test_reentrantlock)
+ 4c3:	b8 20 00 00 00       	mov    $0x20,%eax
+ 4c8:	cd 40                	int    $0x40
+ 4ca:	c3                   	ret    
  4cb:	66 90                	xchg   %ax,%ax
  4cd:	66 90                	xchg   %ax,%ax
  4cf:	90                   	nop

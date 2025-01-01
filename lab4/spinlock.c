@@ -8,7 +8,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "spinlock.h"
-
+ 
 void
 initlock(struct spinlock *lk, char *name)
 {
@@ -123,4 +123,3 @@ popcli(void)
   if(mycpu()->ncli == 0 && mycpu()->intena)
     sti();
 }
-

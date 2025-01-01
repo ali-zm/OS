@@ -51,6 +51,7 @@
 00000170 match
 00000623 link
 000005c3 exit
+000006b3 test_reentrantlock
 00000550 atoi
 00000400 strlen
 00000603 open

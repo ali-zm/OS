@@ -243,3 +243,13 @@ int sys_sum_all_cpus_syscalls(void)
 {
   return sum_all_cpus_syscalls();
 }
+
+int sys_test_reentrantlock()
+{
+  int num;
+  if(argint(0, &num) < 0)
+  {
+    return -1;
+  }
+  return test_reentrantlock(num);
+}

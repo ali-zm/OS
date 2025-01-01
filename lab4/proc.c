@@ -14,7 +14,9 @@ struct
   struct proc proc[NPROC];
 } ptable;
 
+
 static struct proc *initproc;
+struct reentrantlock rlock;
 
 int nextpid = 1;
 extern void forkret(void);
@@ -789,7 +791,7 @@ void show_process_info()
     space(columns[7] - num_digits((int)p->sched_info.num_of_cycles));
     cprintf("\n");
   }
-}
+} 
 
 void set_burst_confidence(int pid, int burst, int conf)
 {
@@ -817,4 +819,62 @@ int sum_all_cpus_syscalls()
   for(int i=0; i<NCPU; i++)
     count += cpus[i].count_syscalls;
   return count;
+}
+
+// jadid brona
+void
+initreentrantlock(char* name)
+{
+  initlock(&rlock.lock, name);
+  rlock.owner = 0;
+  rlock.recursion = 0;
+}
+
+void
+acquirereentrantlock()
+{
+  if(rlock.owner == myproc())
+  {
+    rlock.recursion++;
+    return;
+  }
+  acquire(&rlock.lock);
+  rlock.owner = myproc();
+  rlock.recursion = 1;
+}
+
+void
+releasereentrantlock()
+{
+  cprintf("mmm %d mmm %d \n", rlock.owner->pid, myproc()->pid);
+  if(rlock.owner == myproc())
+  {
+    rlock.recursion--;
+    if (rlock.recursion > 0)
+      return;
+    release(&rlock.lock);
+    rlock.owner = 0;
+    rlock.recursion = 0;   
+  }
+  else
+    panic("First acquire the Reentrantlock.\n");
+}
+
+void initrlock()
+{
+  initreentrantlock("borna ali");
+}
+
+int test_reentrantlock(int num)
+{
+  if(!num)
+  {
+    cprintf("return from func\n");
+    return;
+  }
+  acquirereentrantlock();
+  num--;
+  test_reentrantlock(num);
+  releasereentrantlock();
+  return 0;
 }

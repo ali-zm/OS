@@ -22,7 +22,7 @@ int chdir(const char*);
 int dup(int);
 int getpid(void);
 char* sbrk(int);
-int sleep(int);
+int sleep(int); 
 int uptime(void);
 int sort_syscalls(int pid);
 int get_most_syscalls(int pid);
@@ -33,6 +33,7 @@ int set_level(int pid, int new_level);
 void set_burst_confidence(int pid, int burst, int conf);
 int count_syscalls_all_cpus();
 int sum_all_cpus_syscalls();
+int test_reentrantlock(int);
 
 
 // ulib.c

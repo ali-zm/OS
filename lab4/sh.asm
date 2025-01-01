@@ -2181,10 +2181,12 @@ SYSCALL(sum_all_cpus_syscalls)
      f0b:	b8 1f 00 00 00       	mov    $0x1f,%eax
      f10:	cd 40                	int    $0x40
      f12:	c3                   	ret    
-     f13:	66 90                	xchg   %ax,%ax
-     f15:	66 90                	xchg   %ax,%ax
-     f17:	66 90                	xchg   %ax,%ax
-     f19:	66 90                	xchg   %ax,%ax
+
+00000f13 <test_reentrantlock>:
+ SYSCALL(test_reentrantlock)
+     f13:	b8 20 00 00 00       	mov    $0x20,%eax
+     f18:	cd 40                	int    $0x40
+     f1a:	c3                   	ret    
      f1b:	66 90                	xchg   %ax,%ax
      f1d:	66 90                	xchg   %ax,%ax
      f1f:	90                   	nop
