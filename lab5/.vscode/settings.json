@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "defs.h": "c",
+        "syscall.h": "c",
+        "types.h": "c",
+        "fcntl.h": "c",
+        "memlayout.h": "c"
+    }
+}
